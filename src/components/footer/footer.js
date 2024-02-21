@@ -21,7 +21,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Newsletter from '../../components/newsletter/index';
-import NewsletterImg from '../../assets/images/newsletter.png';
+
 
 const Footer = () => {
     return (
@@ -31,15 +31,13 @@ const Footer = () => {
                 <div className='container-fluid'>
                     <div className='box d-flex align-items-center'>
                         <div className='info'>
-                            <h2>Stay home & get your daily <br />needs from our shop</h2>
-                            <p>Start You'r Daily Shopping with Nest Mart</p>
+                            <p>Stay cozy indoors while satisfying all your home decor cravings with<br />our shop's wide range of products.</p>
+                            <p>Start You'r Shopping with Chitropot</p>
                             <br /><br className='res-hide' />
                             <Newsletter />
                         </div>
 
-                        <div className='img'>
-                            <img src={NewsletterImg} className='w-100' />
-                        </div>
+                        
                     </div>
                 </div>
             </section>
@@ -53,7 +51,7 @@ const Footer = () => {
                                     <span><img src={Icon1} /></span>
                                     <div className='info'>
                                         <h4>Best prices & offers</h4>
-                                        <p>Orders $50 or more</p>
+                                        <p>Orders 5000 or more</p>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +61,7 @@ const Footer = () => {
                                     <span><img src={Icon2} /></span>
                                     <div className='info'>
                                         <h4>Free delivery</h4>
-                                        <p>Orders $50 or more</p>
+                                        <p>Orders 50000 or more</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +71,7 @@ const Footer = () => {
                                     <span><img src={Icon3} /></span>
                                     <div className='info'>
                                         <h4>Great daily deal</h4>
-                                        <p>Orders $50 or more</p>
+                                        <p>Orders 5000 or more</p>
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +82,7 @@ const Footer = () => {
                                     <span><img src={Icon4} /></span>
                                     <div className='info'>
                                         <h4>Wide assortment</h4>
-                                        <p>Orders $50 or more</p>
+                                        <p>Orders 5000 or more</p>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +93,7 @@ const Footer = () => {
                                     <span><img src={Icon5} /></span>
                                     <div className='info'>
                                         <h4>Easy returns</h4>
-                                        <p>Orders $50 or more</p>
+                                        <p>Orders 5000 or more</p>
                                     </div>
                                 </div>
                             </div>
@@ -111,12 +109,12 @@ const Footer = () => {
                             <div className='col-md-3 part1'>
                                 <Link to='/'><img src={Logo} /></Link>
                                 <br /><br />
-                                <p>Awesome grocery store website template</p>
+                                <p>Awesome Home Decore Store Website Template</p>
                                 <br />
 
-                                <p><LocationOnOutlinedIcon /> <strong>Address</strong>: 5171 W Campbell Ave undefined Kent, Utah 53127 United States</p>
-                                <p><HeadphonesOutlinedIcon /> <strong>Call Us:</strong> (+91) - 540-025-124553 </p>
-                                <p><EmailOutlinedIcon /> <strong>Email:</strong> sale@Nest.com</p>
+                                <p><LocationOnOutlinedIcon /> <strong>Address</strong>: 273/3 West Agargaon Dhaka 1207</p>
+                                <p><HeadphonesOutlinedIcon /> <strong>Call Us:</strong> (+88) - 01773239086 </p>
+                                <p><EmailOutlinedIcon /> <strong>Email:</strong> info@chitropot.com</p>
                                 <p><WatchLaterOutlinedIcon /> <strong>Hours:</strong> 10:00 - 18:00, Mon - Sat</p>
 
                             </div>
@@ -206,8 +204,8 @@ const Footer = () => {
 
                         <div className='row lastStrip'>
                             <div className='col-md-3 part_1'>
-                                <p>© 2022, Nest - HTML Ecommerce Template
-                                    All rights reserved</p>
+                                <p>
+                                    All rights reserved by Chitropot</p>
                             </div>
 
                             <div className='col-md-6 d-flex part_2'>
@@ -215,18 +213,12 @@ const Footer = () => {
                                     <div className='phNo d-flex align-items-center mx-5'>
                                         <span><HeadphonesOutlinedIcon /></span>
                                         <div className='info ml-3'>
-                                            <h3 className='text-g mb-0'>1900 - 888</h3>
+                                            <h3 className='text-g mb-0'></h3>
                                             <p className='mb-0'>24/7 Support Center</p>
                                         </div>
                                     </div>
 
-                                    <div className='phNo d-flex align-items-center  mx-5'>
-                                        <span><HeadphonesOutlinedIcon /></span>
-                                        <div className='info ml-3'>
-                                            <h3 className='text-g mb-0'>1900 - 888</h3>
-                                            <p className='mb-0'>24/7 Support Center</p>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                             </div>
 

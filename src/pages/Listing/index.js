@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
-import Product from '../../components/product';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import Product from '../../components/product/Product';
 import { Button } from '@mui/material';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';

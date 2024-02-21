@@ -6,15 +6,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
-import Home from './pages/Home/index';
-import About from './pages/About/index';
+import Home from './pages/Home/Home';
+
 import Listing from './pages/Listing';
 import NotFound from './pages/NotFound';
-import DetailsPage from './pages/Details';
+import DetailsPage from './pages/Details/DetailsPage';
 import axios from 'axios';
-import Cart from './pages/cart';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
+import Cart from './pages/cart/Cart';
+import SignIn from './pages/SignIn/SignIn';
+import SignUp from './pages/SignUp/SignUp';
 import Loader from './assets/images/loading.gif';
 
 import data from './data';

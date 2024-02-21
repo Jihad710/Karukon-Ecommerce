@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../header/header.css';
-import Logo from '../../assets/images/logo.svg';
+
 import SearchIcon from '@mui/icons-material/Search';
 import Select from '../selectDrop/select';
 import axios from 'axios';
@@ -138,7 +138,7 @@ const Header = (props) => {
                     <div className='container-fluid'>
                         <div className='row'>
                             <div className='col-sm-2 part1 d-flex align-items-center'>
-                                <Link to="/"><img src={Logo} className='logo' /></Link>
+                                <Link to="/"><h2>Chitropot</h2></Link>
                                 {
                                     windowWidth < 992 &&
                                     <div className='ml-auto d-flex align-items-center'>
@@ -199,9 +199,7 @@ const Header = (props) => {
 
                             <div className='col-sm-5 d-flex align-items-center part3 res-hide'>
                                 <div className='ml-auto d-flex align-items-center'>
-                                    <div className='countryWrapper'>
-                                        <Select data={countryList} placeholder={'Your Location'} icon={<LocationOnOutlinedIcon style={{ opacity: '0.5' }} />} />
-                                    </div>
+                                  
                                     <ClickAwayListener onClickAway={() => setisOpenDropDown(false)}>
                                         <ul className='list list-inline mb-0 headerTabs'>
                                             <li className='list-inline-item'>
