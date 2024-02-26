@@ -1139,3 +1139,5 @@ const data = {
   }
 
   export default data;
+
+// [Category,product Tile,Description,Additional Info,Review,primary Image,Img 3 , New Price, Old Price, Quantity,New Arrival]
