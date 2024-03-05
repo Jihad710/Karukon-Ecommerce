@@ -1,6 +1,7 @@
 // Popular Product
 const data = {
-    "productData": [
+    "productData": 
+    [
       {
         "cat_name": "All Products",
         "id": 1,

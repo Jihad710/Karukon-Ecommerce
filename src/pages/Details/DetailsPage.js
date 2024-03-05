@@ -18,7 +18,7 @@ import Product from "../../components/product/Product";
 import axios from "axios";
 import { MyContext } from "../../App";
 
-const DetailsPage = (props) => {
+function DetailsPage(props) {
   const [zoomInage, setZoomImage] = useState(
     "https://www.jiomart.com/images/product/original/490000363/maggi-2-minute-masala-noodles-70-g-product-images-o490000363-p490000363-0-202305292130.jpg"
   );
@@ -111,52 +111,28 @@ const DetailsPage = (props) => {
       setinputValue(inputValue - 1);
     }
   };
-
+  // load product details =====================
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    props.data.length !== 0 &&
-      props.data.map((item) => {
-        item.items.length !== 0 &&
-          item.items.map((item_) => {
-            item_.products.length !== 0 &&
-              item_.products.map((product) => {
-                if (parseInt(product.id) === parseInt(id)) {
-                  setCurrentProduct(product);
-                }
-              });
-          });
-      });
-
-    //related products code
-
-    const related_products = [];
-
-    props.data.length !== 0 &&
-      props.data.map((item) => {
-        if (prodCat.parentCat === item.cat_name) {
-          item.items.length !== 0 &&
-            item.items.map((item_) => {
-              if (prodCat.subCatName === item_.cat_name) {
-                item_.products.length !== 0 &&
-                  item_.products.map((product, index) => {
-                    if (product.id !== parseInt(id)) {
-                      related_products.push(product);
-                    }
-                  });
-              }
-            });
-        }
-      });
-
-    if (related_products.length !== 0) {
-      setRelatedProducts(related_products);
-    }
-
+    (async()=>{
+      const productDetails = await axios(`http://localhost:5000/product/${id}`);
+      setCurrentProduct(productDetails.data);
+    })()
     showReviews();
-
     getCartData("http://localhost:5000/cartItems");
   }, [id]);
+
+  // load recomended product =====================
+  useEffect(()=>{
+    (async()=>{
+      const {data} = await axios(`http://localhost:5000/products?category=${currentProduct?.categoryName}`);
+      const related_products = data?.filter(product => product?._id !== id)
+      if (related_products.length !== 0) {
+        setRelatedProducts(related_products);
+      }
+    })()
+  },[currentProduct,id])
 
   const changeInput = (name, value) => {
     if (name === "rating") {
@@ -266,12 +242,10 @@ const DetailsPage = (props) => {
                       .split(" ")
                       .join("-")
                       .toLowerCase()}`}
-                    onClick={() =>
-                      sessionStorage.setItem(
-                        "cat",
-                        prodCat.parentCat.split(" ").join("-").toLowerCase()
-                      )
-                    }
+                    onClick={() => sessionStorage.setItem(
+                      "cat",
+                      prodCat.parentCat.split(" ").join("-").toLowerCase()
+                    )}
                     className="text-capitalize"
                   >
                     {prodCat.parentCat}
@@ -283,12 +257,10 @@ const DetailsPage = (props) => {
                     to={`/cat/${prodCat.parentCat.toLowerCase()}/${prodCat.subCatName
                       .replace(/\s/g, "-")
                       .toLowerCase()}`}
-                    onClick={() =>
-                      sessionStorage.setItem(
-                        "cat",
-                        prodCat.subCatName.toLowerCase()
-                      )
-                    }
+                    onClick={() => sessionStorage.setItem(
+                      "cat",
+                      prodCat.subCatName.toLowerCase()
+                    )}
                     className="text-capitalize"
                   >
                     {prodCat.subCatName}
@@ -311,14 +283,13 @@ const DetailsPage = (props) => {
                   ref={zoomSliderBig}
                 >
                   {currentProduct.productImages !== undefined &&
-                    currentProduct.productImages.map((imgUrl, index) => {
+                    currentProduct.productImages?.map((imgUrl, index) => {
                       return (
-                        <div className="item">
+                        <div className="item" key={index}>
                           <InnerImageZoom
                             zoomType="hover"
                             zoomScale={1}
-                            src={`${imgUrl}?im=Resize=(${bigImageSize[0]},${bigImageSize[1]})`}
-                          />
+                            src={`${imgUrl}?im=Resize=(${bigImageSize[0]},${bigImageSize[1]})`} />
                         </div>
                       );
                     })}
@@ -334,7 +305,7 @@ const DetailsPage = (props) => {
                           src={`${imgUrl}?im=Resize=(${smlImageSize[0]},${smlImageSize[1]})`}
                           className="w-100"
                           onClick={() => goto(index)}
-                        />
+                          alt="" />
                       </div>
                     );
                   })}
@@ -350,8 +321,7 @@ const DetailsPage = (props) => {
                   name="half-rating-read"
                   value={parseFloat(currentProduct.rating)}
                   precision={0.5}
-                  readOnly
-                />
+                  readOnly />
                 <span className="text-light ml-2">(32 reviews)</span>
               </div>
 
@@ -382,9 +352,7 @@ const DetailsPage = (props) => {
                         return (
                           <li className="list-inline-item">
                             <a
-                              className={`tag ${
-                                activeSize === index ? "active" : ""
-                              }`}
+                              className={`tag ${activeSize === index ? "active" : ""}`}
                               onClick={() => isActive(index)}
                             >
                               {item}g
@@ -405,9 +373,7 @@ const DetailsPage = (props) => {
                         return (
                           <li className="list-inline-item">
                             <a
-                              className={`tag ${
-                                activeSize === index ? "active" : ""
-                              }`}
+                              className={`tag ${activeSize === index ? "active" : ""}`}
                               onClick={() => isActive(index)}
                             >
                               {RAM} GB
@@ -428,9 +394,7 @@ const DetailsPage = (props) => {
                         return (
                           <li className="list-inline-item">
                             <a
-                              className={`tag ${
-                                activeSize === index ? "active" : ""
-                              }`}
+                              className={`tag ${activeSize === index ? "active" : ""}`}
                               onClick={() => isActive(index)}
                             >
                               {SIZE}
@@ -446,9 +410,7 @@ const DetailsPage = (props) => {
                 <div className="d-flex align-items-center">
                   {context.windowWidth > 992 && (
                     <Button
-                      className={`btn-g btn-lg addtocartbtn ${
-                        isAlreadyAddedInCart === true && "no-click"
-                      }`}
+                      className={`btn-g btn-lg addtocartbtn ${isAlreadyAddedInCart === true && "no-click"}`}
                       onClick={() => addToCart(currentProduct)}
                     >
                       <ShoppingCartOutlinedIcon />
@@ -477,7 +439,7 @@ const DetailsPage = (props) => {
                     className={`${activeTabs === 0 && "active"}`}
                     onClick={() => {
                       setActiveTabs(0);
-                    }}
+                    } }
                   >
                     Description
                   </Button>
@@ -487,7 +449,7 @@ const DetailsPage = (props) => {
                     className={`${activeTabs === 1 && "active"}`}
                     onClick={() => {
                       setActiveTabs(1);
-                    }}
+                    } }
                   >
                     Additional info
                   </Button>
@@ -498,7 +460,7 @@ const DetailsPage = (props) => {
                     onClick={() => {
                       setActiveTabs(2);
                       showReviews();
-                    }}
+                    } }
                   >
                     Reviews (3)
                   </Button>
@@ -640,8 +602,7 @@ const DetailsPage = (props) => {
                                       name="half-rating-read"
                                       value={parseFloat(item.rating)}
                                       precision={0.5}
-                                      readOnly
-                                    />
+                                      readOnly />
                                   </div>
                                 </div>
 
@@ -663,9 +624,7 @@ const DetailsPage = (props) => {
                             placeholder="Write a Review"
                             name="review"
                             value={reviewFields.review}
-                            onChange={(e) =>
-                              changeInput(e.target.name, e.target.value)
-                            }
+                            onChange={(e) => changeInput(e.target.name, e.target.value)}
                           ></textarea>
                         </div>
                         <div className="row">
@@ -677,10 +636,7 @@ const DetailsPage = (props) => {
                                 className="form-control"
                                 placeholder="Name"
                                 name="userName"
-                                onChange={(e) =>
-                                  changeInput(e.target.name, e.target.value)
-                                }
-                              />
+                                onChange={(e) => changeInput(e.target.name, e.target.value)} />
                             </div>
                           </div>
 
@@ -690,10 +646,7 @@ const DetailsPage = (props) => {
                                 name="rating"
                                 value={rating}
                                 precision={0.5}
-                                onChange={(e) =>
-                                  changeInput(e.target.name, e.target.value)
-                                }
-                              />
+                                onChange={(e) => changeInput(e.target.name, e.target.value)} />
                             </div>
                           </div>
                         </div>
@@ -714,8 +667,7 @@ const DetailsPage = (props) => {
                           name="half-rating-read"
                           defaultValue={4.5}
                           precision={0.5}
-                          readOnly
-                        />
+                          readOnly />
                         <strong className="ml-3">4.8 out of 5</strong>
                       </div>
 
@@ -822,6 +774,6 @@ const DetailsPage = (props) => {
       </section>
     </>
   );
-};
+}
 
 export default DetailsPage;

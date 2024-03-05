@@ -7,9 +7,10 @@ import Product from '../../components/product/Product';
 
 
 import { MyContext } from '../../App';
+import axios from 'axios';
 
 const Home = (props) => {
-    const [prodData, setProdData] = useState(props.data);
+    const [products, setProducts] = useState([]);
     const [catArray, setCatArray] = useState([]);
     const [activeTab, setActiveTab] = useState();
     const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -29,81 +30,102 @@ const Home = (props) => {
         arrows: context.windowWidth < 992 ? false : true,
     };
 
+    // load product  =====================
     useEffect(() => {
-        if (prodData.length !== 0) {
-            const catArr = prodData.flatMap(item => item.items.map(item_ => item_.cat_name));
-            const uniqueCatArr = Array.from(new Set(catArr)); // Remove duplicates
-            setCatArray(uniqueCatArr);
-            setActiveTab(uniqueCatArr[0]);
-            window.scrollTo(0, 0);
+        (async()=>{
+            const allProducts = await axios.get("http://localhost:5000/products")
+            setProducts(allProducts.data)
+            // console.log(allProducts.data);
+        })()
+    }, []);    
+    
+    // Create a map to store one product per category
+    const productCategory = new Map();
+    // Iterate over each product and add the first product of each category to the map
+    products.forEach(product => {
+        if (!productCategory.has(product.categoryName)) {
+            productCategory.set(product.categoryName, product);
         }
-    }, [prodData]);
+    });
+    // Convert the map values back to an array
+    const totalCategory = Array.from(productCategory.values());
+    
+    // useEffect(() => {
+    //     if (products.length !== 0) {
+    //         const catArr = products.flatMap(item => item.items.map(item_ => item_.categoryName));
+    //         const uniqueCatArr = Array.from(new Set(catArr)); // Remove duplicates
+    //         setCatArray(uniqueCatArr);
+    //         setActiveTab(uniqueCatArr[0]);
+    //         window.scrollTo(0, 0);
+    //     }
+    // }, [products]);
 
-    useEffect(() => {
-        const arr = [];
-        if (prodData.length !== 0) {
-            prodData.forEach(item => {
-                item.items.forEach(item_ => {
-                    if (item_.cat_name === activeTab) {
-                        item_.products.forEach(product => {
-                            arr.push({ ...product, parentCatName: item.cat_name, subCatName: item_.cat_name });
-                        });
-                    }
-                });
-            });
-            setActiveTabData(arr);
-            setIsLoadingProducts(true); // Start loading
-            setTimeout(() => {
-                setIsLoadingProducts(false); // Stop loading after a delay
-            }, 1000);
-        }
-    }, [activeTab, prodData]);
+    // useEffect(() => {
+    //     const arr = [];
+    //     if (products.length !== 0) {
+    //         products.forEach(item => {
+    //             if (item.categoryName === activeTab) {
+    //                     arr.push({ ...item});
+    //             }
+    //         });
+    //         setActiveTabData(arr);
+    //         setIsLoadingProducts(true); // Start loading
+    //         setTimeout(() => {
+    //             setIsLoadingProducts(false); // Stop loading after a delay
+    //         }, 1000);
+    //     }
+    // }, [activeTab, products]);
+    // console.log(activeTab);
 
-    useEffect(() => {
-        const bestSellsArr = [];
-        if (prodData.length !== 0) {
-            prodData.forEach(item => {
-                if (item.cat_name === "Electronics") {
-                    item.items.forEach(item_ => {
-                        item_.products.forEach(product => {
-                            bestSellsArr.push(product);
-                        });
-                    });
-                }
-            });
-            setBestSells(bestSellsArr);
-        }
-    }, [prodData]);
+    // useEffect(() => {
+    //     const bestSellsArr = [];
+    //     if (products.length !== 0) {
+    //         products.forEach(item => {
+    //             if (item.categoryName === "Electronics") {
+    //                 item.items.forEach(item_ => {
+    //                     item_.products.forEach(product => {
+    //                         bestSellsArr.push(product);
+    //                     });
+    //                 });
+    //             }
+    //         });
+    //         setBestSells(bestSellsArr);
+    //     }
+    // }, [products]);
 
     return (
         <div style={{ display: 'block' }}>
             <SliderBanner />
-            <CatSlider data={prodData} />
+            {/* <CatSlider products={products} /> */}
             <Banners />
             <section className='homeProducts homeProductWrapper'>
                 <div className='container-fluid'>
                     <div className='d-flex align-items-center homeProductsTitleWrap'>
                         <h2 className='hd mb-0 mt-0 res-full'>Popular Products</h2>
                         <ul className='list list-inline ml-auto filterTab mb-0 res-full'>
-                            {catArray.map((cat, index) => (
+                            {totalCategory?.map((category, index) => (
                                 <li className="list list-inline-item" key={index}>
                                     <a
-                                        className={`cursor text-capitalize ${activeTabIndex === index ? 'act' : ''}`}
-                                        onClick={( ) => {
-                                            setActiveTab(cat);
-                                            setActiveTabIndex(index);
-                                            productRow.current.scrollLeft = 0;
-                                            setIsLoadingProducts(true);
+                                        href='/'
+                                        className={`cursor text-capitalize`
+                                    }
+                                    // ${activeTabIndex === index ? 'act' : ''}
+                                        onClick={() => {
+                                            // setActiveTab(category);
+                                            // setActiveTabIndex(index);
+                                            // productRow.current.scrollLeft = 0;
+                                            // setIsLoadingProducts(true);
                                         }}
+                                        
                                     >
-                                        {cat}
+                                        {category?.categoryName}
                                     </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
                     <div className={`productRow ${isLoadingProducts === true && 'loading'}`} ref={productRow}>
-                        {activeTabData.map((item, index) => (
+                        {products.map((item, index) => (
                             <div className='item' key={index}>
                                 <Product tag={item.type} item={item} />
                             </div>

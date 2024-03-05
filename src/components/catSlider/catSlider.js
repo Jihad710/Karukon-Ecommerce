@@ -4,9 +4,10 @@ import './style.css';
 import { Link } from 'react-router-dom';
 
 import { MyContext } from '../../App';
-const CatSlider = (props) => {
+const CatSlider = ({products}) => {
 
-    const [allData, setAllData] = useState(props.data);
+    const [allData, setAllData] = useState(products);
+    console.log(products);
     const [totalLength, setTotalLength] = useState([]);
     const context = useContext(MyContext);
 
@@ -47,24 +48,25 @@ const CatSlider = (props) => {
     };
 
 
-    var catLength = 0;
-    var lengthArr = [];
-    useEffect(() => {
-        allData.length !== 0 &&
-            allData.map((item, index) => {
-                item.items.length !== 0 &&
-                    item.items.map((item_) => {
-                        catLength += item_.products.length
-                    })
-                lengthArr.push(catLength)
-                catLength = 0;
-            })
+    // var catLength = 0;
+    // var lengthArr = [];
 
-        const list = lengthArr.filter((item, index) => lengthArr.indexOf(item) === index);
-        setTotalLength(list)
+    // useEffect(() => {
+    //     allData.length !== 0 &&
+    //         allData.map((item, index) => {
+    //             item.items.length !== 0 &&
+    //                 item.items.map((item_) => {
+    //                     catLength += item_.products.length
+    //                 })
+    //             lengthArr.push(catLength)
+    //             catLength = 0;
+    //         })
+
+    //     const list = lengthArr.filter((item, index) => lengthArr.indexOf(item) === index);
+    //     setTotalLength(list)
 
 
-    }, []);
+    // }, []);
 
 
     return (
@@ -80,10 +82,10 @@ const CatSlider = (props) => {
                             allData.map((item, index) => {
                                 return (
                                     <div className='item' key={index} >
-                                        <Link to={`/cat/${item.cat_name.toLowerCase()}`}>
+                                        <Link to={`/cat/${item.categoryName.toLowerCase()}`}>
                                             <div className='info' style={{ background: itemBg[index] }}>
-                                                <img src={item.image} width="80" />
-                                                <h5 className='text-capitalize mt-3'>{item.cat_name}</h5>
+                                                <img src={item.image} width="80" alt=""/>
+                                                <h5 className='text-capitalize mt-3'>{item.categoryName}</h5>
                                                 <p>{totalLength[index]} items</p>
                                             </div>
                                         </Link>

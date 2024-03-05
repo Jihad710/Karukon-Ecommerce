@@ -12,7 +12,7 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import { MyContext } from '../../App';
 
 
-const Product = (props) => {
+const Product = ({item}) => {
 
     const [productData, setProductData] = useState();
     const [isAdded, setIsadded] = useState(false);
@@ -20,8 +20,8 @@ const Product = (props) => {
     const context  = useContext(MyContext);
 
     useEffect(() => {
-        setProductData(props.item);
-    }, [props.item])
+        setProductData(item);
+    }, [item])
 
     const setProductCat=()=>{
         sessionStorage.setItem('parentCat', productData.parentCatName);
@@ -29,26 +29,26 @@ const Product = (props) => {
     }
 
 
-    const addToCart=(item)=>{
-        context.addToCart(item);
+    const addToCart=(id)=>{
+        context.addToCart(id);
         setIsadded(true);
     }
 
-
+    // console.log(item);
     return (
         <div className='productThumb' onClick={setProductCat}>
             {
-                props.tag !== null && props.tag !== undefined &&
-                <span className={`badge ${props.tag}`}>{props.tag}</span>
+                item.tag !== null && item.tag !== undefined &&
+                <span className={`badge ${item.tag}`}>{item.tag}</span>
             }
 
             {
                 productData !== undefined &&
                 <>
-                    <Link to={`/product/${productData.id}`}>
+                    <Link to={`/product/${productData._id}`}>
                         <div className='imgWrapper'>
                             <div className='p-4 wrapper mb-3'>
-                                <img src={productData.catImg+'?im=Resize=(420,420)'} className='w-100' />
+                                <img src={productData.productImage+'?im=Resize=(420,420)'} className='w-100' alt=''/>
                             </div>
 
                             <div className='overlay transition'>
@@ -88,7 +88,7 @@ const Product = (props) => {
                             </div>
                         </div>
 
-                        <Button className='w-100 transition mt-3' onClick={()=>addToCart(productData)}><ShoppingCartOutlinedIcon /> 
+                        <Button className='w-100 transition mt-3' onClick={()=>addToCart(productData._id)}><ShoppingCartOutlinedIcon /> 
                             {
                                 isAdded===true ? 'Added' : 'Add'
                             }
