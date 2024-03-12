@@ -18,6 +18,7 @@ import SignUp from './pages/SignUp/SignUp';
 import Loader from './assets/images/loading.gif';
 
 import data from './data';
+import Order from './pages/Order/Order';
 
 const MyContext = createContext();
 
@@ -157,6 +158,7 @@ function App() {
           <Route exact={true} path="/cat/:id/:id" element={<Listing data={data.productData} single={false} />} />
           <Route exact={true} path="/product/:id" element={<DetailsPage data={data.productData} />} />
           <Route exact={true} path="/cart" element={<Cart />} />
+          <Route exact={true} path="/order" element={<Order />} />
           <Route exact={true} path="/signIn" element={<SignIn />} />
           <Route exact={true} path="/signUp" element={<SignUp />} />
           <Route exact={true} path="*" element={<NotFound />} />

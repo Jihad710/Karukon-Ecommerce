@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-import Box from '@mui/material/Box';
+
 import TextField from '@mui/material/TextField';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import GoogleImg from '../../assets/images/google.png';
 
-import { initializeApp } from "firebase/app";
+
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from '../../firebase';
 
