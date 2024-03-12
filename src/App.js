@@ -75,28 +75,41 @@ function App() {
   }
 
   const getCartData = async (url) => {
-    try {
-      await axios.get(url).then((response) => {
-        setCartItems(response.data);
-      })
 
-    } catch (error) {
-      console.log(error.message);
-    }
+    
+    // try {
+    //   await axios.get(url).then((response) => {
+    //     setCartItems(response.data);
+    //   })
+
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
   }
 
-  const addToCart = async (item) => {
-    item.quantity = 1;
-
-    try {
-      await axios.post("http://localhost:5000/cartItems", item).then((res) => {
-        if (res !== undefined) {
-          setCartItems([...cartItems, { ...item, quantity: 1 }])
-        }
-      })
-    } catch (error) {
-      console.log(error)
+  const addToCart = (id) => {
+    const cartItem =  JSON.parse(localStorage.getItem("ChitropotCart"))
+    console.log(cartItem);
+    if(cartItem?.length > 0){
+      const isCart = cartItem?.find(item => item === id)
+      console.log(isCart);
+      if(!isCart){
+        const totalCart = [...cartItem, id]
+        localStorage.setItem("ChitropotCart", JSON.stringify(totalCart))
+      }
+    }else{
+      localStorage.setItem("ChitropotCart", JSON.stringify([id]))
     }
+
+    // try {
+    //  const res =  await axios.post("http://localhost:5000/cartItems", id)
+  
+    //     if (res !== undefined) {
+    //       setCartItems([...cartItems, { ...id, quantity: 1 }])
+    //     }
+    // } catch (error) {
+    //   console.log(error)
+    // }
 
   }
 
@@ -127,6 +140,7 @@ function App() {
   }
 
   const value = {
+    productData,
     cartItems,
     isLogin,
     windowWidth,
@@ -147,10 +161,9 @@ function App() {
     <BrowserRouter>
       <MyContext.Provider value={value}>
         {
-          isLoading===true && <div className='loader'><img src={Loader}/></div>
+          isLoading===true && <div className='loader'><img alt="" src={Loader}/></div>
         }
-
-        
+ 
         <Header data={data.productData} />
         <Routes>
           <Route exact={true} path="/" element={<Home data={data.productData} />} />

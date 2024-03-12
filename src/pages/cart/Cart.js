@@ -10,57 +10,126 @@ import { MyContext } from '../../App';
 import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([])
+    const [Refetch, setRefetch] = useState(false)
     const context = useContext(MyContext);
     const history = useNavigate();
 
-    useEffect(() => {
-        if(context.isLogin==="true"){
-            getCartData("http://localhost:5000/cartItems");
-        }else{
-            history('/');
-        }
+    // useEffect(() => {
+    //     if(context.isLogin==="true"){
+    //         getCartData("http://localhost:5000/cartItems");
+    //     }else{
+    //         history('/');
+    //     }
 
-        window.scrollTo(0,0);
+    //     window.scrollTo(0,0);
         
-    }, [])
+    // }, [])
 
-    const getCartData = async (url) => {
-        try {
-            await axios.get(url).then((response) => {
-                setCartItems(response.data);
-            })
+    useEffect(() => {
+        (async()=>{
+            const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+            if(cartItemId?.length > 0) {
+                const cartProducts = await axios.post("http://localhost:5000/cart",cartItemId)
+                setCartItems(cartProducts.data)
+            }else{
+                setCartItems([])
 
-        } catch (error) {
-            console.log(error.message);
-        }
+            }
+        })()
+    }, [Refetch]);
+
+    const getCartData = (url) => {
+        const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+        // const cartItem = products.filter(item => item.id === cartItemId)
+        // console.log(cartItem);
+
     }
 
 
     const deleteItem = async (id) => {
-        const response = await axios.delete(`http://localhost:5000/cartItems/${id}`);
-        if (response !== null) {
-            getCartData("http://localhost:5000/cartItems");
-            context.removeItemsFromCart(id);
-        }
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+                const restCart = cartItemId.filter(itemId => itemId !== id);
+                localStorage.setItem("ChitropotCart", JSON.stringify(restCart))
+                setRefetch(!Refetch)
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your cart item has been deleted.",
+                    icon: "success"
+                });
+                
+            }
+          });
+
+    // database related code===========================
+
+        // const response = await axios.delete(`http://localhost:5000/cartItems/${id}`);
+        // if (response !== null) {
+        //     getCartData("http://localhost:5000/cartItems");
+        //     context.removeItemsFromCart(id);
+        // }
     }
 
 
 
     const emptyCart = () => {
-        let response = null;
-        cartItems.length !== 0 &&
-            cartItems.map((item) => {
-                response = axios.delete(`http://localhost:5000/cartItems/${parseInt(item.id)}`);
-            })
-        if (response !== null) {
-            getCartData("http://localhost:5000/cartItems");
+        const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+        if(cartItemId?.length > 0) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.clear()
+                    setRefetch(!Refetch)
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your all cart item has been deleted.",
+                        icon: "success"
+                    });
+                }
+              });
+        }else{
+            Swal.fire({
+                // position: "top-end",
+                icon: "warning",
+                title: "There has no item in cart",
+                showConfirmButton: false,
+                timer: 1500
+              });
         }
 
-        context.emptyCart();
+        
+        // let response = null;
+        // cartItems.length !== 0 &&
+        //     cartItems.map((item) => {
+        //         response = axios.delete(`http://localhost:5000/cartItems/${parseInt(item.id)}`);
+        //     })
+        // if (response !== null) {
+        //     getCartData("http://localhost:5000/cartItems");
+        // }
+
+        // context.emptyCart();
     }
 
 
@@ -133,7 +202,7 @@ const Cart = () => {
 
                                                                     <div className='img'>
                                                                         <Link to={`/product/${item.id}`}>
-                                                                            <img src={item.catImg + '?im=Resize=(100,100)'} className='w-100' />
+                                                                            <img src={item.productImage + '?im=Resize=(100,100)'} className='w-100' />
                                                                         </Link>
                                                                     </div>
 
@@ -147,19 +216,19 @@ const Cart = () => {
                                                                 </div>
                                                             </td>
 
-                                                            <td width="20%"><span>Rs:  {parseInt(item.price.split(",").join(""))}</span></td>
+                                                            <td><span>Rs:  {parseInt(item.price.split(",").join(""))}</span></td>
 
                                                             <td>
                                                             <QuantityBox item={item} cartItems={cartItems} index={index} updateCart={updateCart} />
                                                             </td>
 
                                                             <td>
-                                                            <span className='text-g'>Rs. {parseInt(item.price.split(",").join("")) * parseInt(item.quantity)}</span>
+                                                            <span className='text-g'>Rs. {parseInt(item.price.split(",").join("")) * parseInt(item?.quantity || 1)}</span>
                                                             </td>
 
                                                             <td align='center'>
                                                                 <span className='cursor'
-                                                                    onClick={() => deleteItem(item.id)}
+                                                                    onClick={() => deleteItem(item._id)}
                                                                 ><DeleteOutlineOutlinedIcon /></span>
                                                             </td>
 
@@ -199,8 +268,8 @@ const Cart = () => {
                                     <h5 className='mb-0 text-light'>Subtotal</h5>
                                     <h3 className='ml-auto mb-0 font-weight-bold'><span className='text-g'>
                                     {
-                                            cartItems.length !== 0 &&
-                                            cartItems.map(item => parseInt(item.price.split(",").join("")) * item.quantity).reduce((total, value) => total + value, 0)
+                                            cartItems.length !== 0 ? 
+                                            cartItems.map(item => parseInt(item?.price.split(",").join("")) * (item?.quantity || 1)).reduce((total, value) => total + value, 0) : 0
                                         }
                                     </span></h3>
                                 </div>
@@ -221,8 +290,8 @@ const Cart = () => {
                                     <h5 className='mb-0 text-light'>Total</h5>
                                     <h3 className='ml-auto mb-0 font-weight-bold'><span className='text-g'>
                                     {
-                                            cartItems.length !== 0 &&
-                                            cartItems.map(item => parseInt(item.price.split(",").join("")) * item.quantity).reduce((total, value) => total + value, 0)
+                                            cartItems.length !== 0 ?
+                                            cartItems.map(item => parseInt(item.price.split(",").join("")) * (item.quantity || 1)).reduce((total, value) => total + value, 0) : 0
                                         }
                                     </span></h3>
                                 </div>
