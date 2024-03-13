@@ -126,7 +126,7 @@ function DetailsPage(props) {
   // load recomended product =====================
   useEffect(()=>{
     (async()=>{
-      const {data} = await axios(`http://localhost:5000/products?category=${currentProduct?.categoryName}`);
+      const {data} = await axios(`http://localhost:5000/category?category=${currentProduct?.categoryName}`);
       const related_products = data?.filter(product => product?._id !== id)
       if (related_products.length !== 0) {
         setRelatedProducts(related_products);
