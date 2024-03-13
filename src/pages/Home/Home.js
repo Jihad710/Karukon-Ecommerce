@@ -11,10 +11,12 @@ import axios from 'axios';
 
 const Home = (props) => {
     const [products, setProducts] = useState([]);
-    const [catArray, setCatArray] = useState([]);
+    const [allCategory, setAllCategory] = useState([]);
+    const [currentCategory, setCurrentCategory] = useState("");
+    const [activeTabData, setActiveTabData] = useState([]);
+console.log(currentCategory);
     const [activeTab, setActiveTab] = useState();
     const [activeTabIndex, setActiveTabIndex] = useState(0);
-    const [activeTabData, setActiveTabData] = useState([]);
     const [bestSells, setBestSells] = useState([]);
     const [isLoadingProducts, setIsLoadingProducts] = useState(false);
     const productRow = useRef();
@@ -29,27 +31,42 @@ const Home = (props) => {
         fade: false,
         arrows: context.windowWidth < 992 ? false : true,
     };
-
     // load product  =====================
     useEffect(() => {
         (async()=>{
-            const allProducts = await axios.get("http://localhost:5000/products")
-            setProducts(allProducts.data)
-            // console.log(allProducts.data);
+            const {data} = await axios(`http://localhost:5000/category?category=${currentCategory}`)
+            if(data?.length > 0){
+                setActiveTabData(data);
+            }
         })()
-    }, []);    
+    }, [currentCategory]);    
     
-    // Create a map to store one product per category
-    const productCategory = new Map();
-    // Iterate over each product and add the first product of each category to the map
-    products.forEach(product => {
-        if (!productCategory.has(product.categoryName)) {
-            productCategory.set(product.categoryName, product);
-        }
-    });
-    // Convert the map values back to an array
-    const totalCategory = Array.from(productCategory.values());
+
+    useEffect(()=>{
+        (async()=>{
+            const {data} = await axios.get("http://localhost:5000/products")
+            // Create a map to store one product per category
+            const productCategory = new Map();
+            // Iterate over each product and add the first product of each category to the map
+            data?.forEach(product => {
+                if (!productCategory.has(product.categoryName)) {
+                    productCategory.set(product.categoryName, product);
+                }
+            });
+            // Convert the map values back to an array
+            const totalCategory = Array.from(productCategory.values());
     
+            if(totalCategory?.length > 0){
+                setAllCategory(totalCategory)
+                setCurrentCategory(totalCategory[0]?.categoryName)
+            }
+
+        })()
+    },[])
+
+
+
+
     // useEffect(() => {
     //     if (products.length !== 0) {
     //         const catArr = products.flatMap(item => item.items.map(item_ => item_.categoryName));
@@ -103,14 +120,14 @@ const Home = (props) => {
                     <div className='d-flex align-items-center homeProductsTitleWrap'>
                         <h2 className='hd mb-0 mt-0 res-full'>Popular Products</h2>
                         <ul className='list list-inline ml-auto filterTab mb-0 res-full'>
-                            {totalCategory?.map((category, index) => (
+                            {allCategory?.map((category, index) => (
                                 <li className="list list-inline-item" key={index}>
-                                    <a
-                                        href='/'
-                                        className={`cursor text-capitalize`
+                                    <button
+                                        className={`cursor btn text-capitalize ${category?.categoryName === currentCategory && 'act'}`
                                     }
                                     // ${activeTabIndex === index ? 'act' : ''}
                                         onClick={() => {
+                                            setCurrentCategory(category?.categoryName)
                                             // setActiveTab(category);
                                             // setActiveTabIndex(index);
                                             // productRow.current.scrollLeft = 0;
@@ -119,13 +136,13 @@ const Home = (props) => {
                                         
                                     >
                                         {category?.categoryName}
-                                    </a>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     </div>
                     <div className={`productRow ${isLoadingProducts === true && 'loading'}`} ref={productRow}>
-                        {products.map((item, index) => (
+                        {activeTabData.map((item, index) => (
                             <div className='item' key={index}>
                                 <Product tag={item.type} item={item} />
                             </div>

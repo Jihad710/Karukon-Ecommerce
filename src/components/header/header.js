@@ -41,14 +41,19 @@ const Header = (props) => {
 
     const headerRef = useRef();
     const searchInput = useRef()
-
+    const [cartItems, setCartItems] = useState([])
+    console.log(cartItems?.length);
     const context = useContext(MyContext);
     const history = useNavigate();
-
     useEffect(() => {
-
-    }, [context.cartItems])
-
+        (async()=>{
+            const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+            if(cartItemId?.length > 0) {
+                const cartProducts = await axios.post("http://localhost:5000/cart",cartItemId)
+                setCartItems(cartProducts.data)
+            }
+        })()
+    }, []);
     const [categories, setcategories] = useState([
         'Milks and Dairies',
         'Wines & Drinks',
@@ -151,7 +156,7 @@ const Header = (props) => {
                                                 <span>
                                                     <Link to={'/cart'}> <img src={IconCart} />
                                                         <span className='badge bg-success rounded-circle'>
-                                                            {context.cartItems.length}
+                                                            {cartItems.length}
                                                         </span>
                                                     </Link>
                                                 </span>
@@ -220,7 +225,7 @@ const Header = (props) => {
                                                 <span>
                                                     <Link to={'/cart'}> <img src={IconCart} />
                                                         <span className='badge bg-success rounded-circle'>
-                                                            {context.cartItems.length}
+                                                            {cartItems?.length}
                                                         </span>
                                                         Cart</Link>
                                                 </span>
