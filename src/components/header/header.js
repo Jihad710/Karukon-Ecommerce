@@ -49,7 +49,7 @@ const Header = (props) => {
         (async()=>{
             const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
             if(cartItemId?.length > 0) {
-                const cartProducts = await axios.post("http://localhost:5000/cart",cartItemId)
+                const cartProducts = await axios.post("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cart",cartItemId)
                 setCartItems(cartProducts.data)
             }
         })()

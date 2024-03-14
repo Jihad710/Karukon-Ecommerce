@@ -37,8 +37,8 @@ function App() {
 
 
   useEffect(() => {
-    // getData('http://localhost:5000/productData');
-    // getCartData("http://localhost:5000/cartItems");
+    // getData('https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/productData');
+    // getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
 
     const is_Login = localStorage.getItem('isLogin');
     setIsLogin(is_Login);
@@ -102,7 +102,7 @@ function App() {
     }
 
     // try {
-    //  const res =  await axios.post("http://localhost:5000/cartItems", id)
+    //  const res =  await axios.post("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems", id)
   
     //     if (res !== undefined) {
     //       setCartItems([...cartItems, { ...id, quantity: 1 }])

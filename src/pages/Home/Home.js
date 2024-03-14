@@ -34,7 +34,7 @@ console.log(currentCategory);
     // load product  =====================
     useEffect(() => {
         (async()=>{
-            const {data} = await axios(`http://localhost:5000/category?category=${currentCategory}`)
+            const {data} = await axios(`https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/category?category=${currentCategory}`)
             if(data?.length > 0){
                 setActiveTabData(data);
             }
@@ -44,7 +44,7 @@ console.log(currentCategory);
 
     useEffect(()=>{
         (async()=>{
-            const {data} = await axios.get("http://localhost:5000/products")
+            const {data} = await axios.get("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/products")
             // Create a map to store one product per category
             const productCategory = new Map();
             // Iterate over each product and add the first product of each category to the map

@@ -116,17 +116,17 @@ function DetailsPage(props) {
     window.scrollTo(0, 0);
 
     (async()=>{
-      const productDetails = await axios(`http://localhost:5000/product/${id}`);
+      const productDetails = await axios(`https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/product/${id}`);
       setCurrentProduct(productDetails.data);
     })()
     showReviews();
-    getCartData("http://localhost:5000/cartItems");
+    getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
   }, [id]);
 
   // load recomended product =====================
   useEffect(()=>{
     (async()=>{
-      const {data} = await axios(`http://localhost:5000/category?category=${currentProduct?.categoryName}`);
+      const {data} = await axios(`https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/category?category=${currentProduct?.categoryName}`);
       const related_products = data?.filter(product => product?._id !== id)
       if (related_products.length !== 0) {
         setRelatedProducts(related_products);
@@ -153,7 +153,7 @@ function DetailsPage(props) {
 
     try {
       await axios
-        .post("http://localhost:5000/productReviews", reviewFields)
+        .post("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/productReviews", reviewFields)
         .then((response) => {
           reviews_Arr.push(response.data);
           setReviewFields(() => ({
@@ -175,7 +175,7 @@ function DetailsPage(props) {
   const showReviews = async () => {
     try {
       await axios
-        .get("http://localhost:5000/productReviews")
+        .get("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/productReviews")
         .then((response) => {
           if (response.data.length !== 0) {
             response.data.map((item) => {
