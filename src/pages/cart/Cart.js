@@ -21,7 +21,7 @@ const Cart = () => {
 
     // useEffect(() => {
     //     if(context.isLogin==="true"){
-    //         getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
+    //         getCartData("https://chitropot-server.vercel.app/cartItems");
     //     }else{
     //         history('/');
     //     }
@@ -34,7 +34,7 @@ const Cart = () => {
         (async()=>{
             const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
             if(cartItemId?.length > 0) {
-                const cartProducts = await axios.post("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cart",cartItemId)
+                const cartProducts = await axios.post("https://chitropot-server.vercel.app/cart",cartItemId)
                 setCartItems(cartProducts.data)
             }else{
                 setCartItems([])
@@ -78,9 +78,9 @@ const Cart = () => {
 
     // database related code===========================
 
-        // const response = await axios.delete(`https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems/${id}`);
+        // const response = await axios.delete(`https://chitropot-server.vercel.app/cartItems/${id}`);
         // if (response !== null) {
-        //     getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
+        //     getCartData("https://chitropot-server.vercel.app/cartItems");
         //     context.removeItemsFromCart(id);
         // }
     }
@@ -123,10 +123,10 @@ const Cart = () => {
         // let response = null;
         // cartItems.length !== 0 &&
         //     cartItems.map((item) => {
-        //         response = axios.delete(`https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems/${parseInt(item.id)}`);
+        //         response = axios.delete(`https://chitropot-server.vercel.app/cartItems/${parseInt(item.id)}`);
         //     })
         // if (response !== null) {
-        //     getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
+        //     getCartData("https://chitropot-server.vercel.app/cartItems");
         // }
 
         // context.emptyCart();
@@ -298,7 +298,7 @@ const Cart = () => {
 
 
                                 <br />
-                                <Button className='btn-g btn-lg'>Proceed To CheckOut</Button>
+                                <Button onClick={()=> history('/order')} className='btn-g btn-lg'>Proceed To CheckOut</Button>
 
 
                             </div>

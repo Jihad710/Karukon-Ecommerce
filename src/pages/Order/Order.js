@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Grid, TextField, Typography, Box, MenuItem } from '@mui/material';
+import axios from 'axios';
 
 
 
@@ -19,6 +20,8 @@ const districts = [
 
 function Order() {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [cartItems, setCartItems] = useState([])
+  const [Refetch, setRefetch] = useState(false)
   const [selectedDistrict, setSelectedDistrict] = useState('');  
    const [isChecked, setIsChecked] = useState(false);
    const [bkashChecked, setBkashChecked] = useState(false);
@@ -39,8 +42,22 @@ const handleCheckboxBkash = () => {
     setSelectedDistrict(event.target.value);
   };
 
+  useEffect(() => {
+    (async()=>{
+        const cartItemId =  JSON.parse(localStorage.getItem("ChitropotCart"))
+        if(cartItemId?.length > 0) {
+            const cartProducts = await axios.post("https://chitropot-server.vercel.app/cart",cartItemId)
+            setCartItems(cartProducts.data)
+        }else{
+            setCartItems([])
+
+        }
+    })()
+}, [Refetch]);
+
   const onSubmit = (data) => {
-    console.log(data); // You can handle the form data submission here
+    const total = cartItems.map(item => parseInt(item?.price.split(",").join("")) * (item?.quantity || 1)).reduce((total, value) => total + value, 0)
+    console.log(total); // You can handle the form data submission here
   };
 
   useEffect(() => {
@@ -235,13 +252,13 @@ const handleCheckboxBkash = () => {
 Yellow & Orange Color Glass 
 Design Mosaic Turkish Jug Style Table Lamp <br/>
 1 × ৳2,690.00 <br/>
-Subtotal: ৳2,690.00
+Subtotal: {cartItems.map(item => parseInt(item?.price.split(",").join("")) * (item?.quantity || 1)).reduce((total, value) => total + value, 0)}
 
           </Typography>
           <hr/>
           <Typography variant="h4" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
     <span style={{ fontWeight: '400' }}>Subtotal</span>
-    <span style={{ fontWeight: '400' }}>৳2,690.00</span>
+    <span style={{ fontWeight: '400' }}>৳{cartItems.map(item => parseInt(item?.price.split(",").join("")) * (item?.quantity || 1)).reduce((total, value) => total + value, 0)}.00</span>
 </Typography>
 <hr></hr>
 <div style={{ display: 'inline-block', position: 'relative' }}>

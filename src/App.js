@@ -37,8 +37,8 @@ function App() {
 
 
   useEffect(() => {
-    // getData('https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/productData');
-    // getCartData("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems");
+    // getData('https://chitropot-server.vercel.app/productData');
+    // getCartData("https://chitropot-server.vercel.app/cartItems");
 
     const is_Login = localStorage.getItem('isLogin');
     setIsLogin(is_Login);
@@ -102,7 +102,7 @@ function App() {
     }
 
     // try {
-    //  const res =  await axios.post("https://chitropot-server-b90ctxvzy-jmjubaers-projects.vercel.app/cartItems", id)
+    //  const res =  await axios.post("https://chitropot-server.vercel.app/cartItems", id)
   
     //     if (res !== undefined) {
     //       setCartItems([...cartItems, { ...id, quantity: 1 }])
