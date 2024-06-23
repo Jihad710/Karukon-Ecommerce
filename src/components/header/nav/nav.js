@@ -155,7 +155,7 @@ const Nav = (props) => {
                         {props.data.length !== 0 &&
                           props.data.map((item, index) => {
                             return (
-                              <div className="col">
+                              <div key={index} className="col">
                                 <a href={`/cat/${item.cat_name.toLowerCase()}`}>
                                   {" "}
                                   <h4 className="text-g text-capitalize">
@@ -166,7 +166,7 @@ const Nav = (props) => {
                                   <ul className="mt-4 mb-0">
                                     {item.items.map((item_, index) => {
                                       return (
-                                        <li>
+                                        <li key={index}>
                                           <Link
                                             onClick={props.closeNav}
                                             to={`/cat/${item.cat_name.toLowerCase()}/${item_.cat_name

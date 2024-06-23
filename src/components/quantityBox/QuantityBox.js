@@ -1,87 +1,52 @@
+import React, { useState, useEffect } from "react";
 
-import React, { useState, useEffect } from 'react';
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import UseAxiosSecured from "../../utils/UseAxiosSecure";
 
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+const QuantityBox = ({ quantity, product }) => {
+  const [inputValue, setInputValue] = useState(quantity);
+  const [isLoading, setIsLoading] = useState(false);
+  const { axiosSecured } = UseAxiosSecured();
+  // useEffect(() => {
+  //   setInputValue(quantity);
+  // }, [quantity]);
+  console.log(product?._id);
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const { data } = await axiosSecured.patch(
+        `/api/users/manipulate-quantity/${product?._id}/${inputValue}`
+      );
+      console.log(data);
+      if (data?.success) {
+        setIsLoading(false);
+      }
+    })();
+  }, [inputValue, product?._id]);
 
-
-
-const QuantityBox = (props) => {
-    const [inputValue, setinputValue] = useState(1);
-    const [cartItems, setcartItems] = useState([]);
-
-    useEffect(() => {
-        setcartItems(props.cartItems);
-        //setinputValue(props.item.quantity)
-    }, [props.cartItems])
-
-
-    const updateCart=(items)=>{
-        props.updateCart(items)
-    }
-
-
-
-    // const plus = () => {
-    //     setinputValue(inputValue + 1)
-    // }
-
-    // const minus = () => {
-    //     if (inputValue !== 1) {
-    //         setinputValue(inputValue - 1)
-    //     }
-    // }
+  console.log(inputValue);
 
 
-
-    return (
-        <div className='addCartSection pt-4 pb-4 d-flex align-items-center '>
-            <div className='counterSec mr-3'>
-                <input type='number' value={inputValue} />
-                <span className='arrow plus'
-                   
-                   onClick={
-                    () => {
-                        setinputValue(inputValue + 1);
-                        const _cart = props.cartItems?.map((cartItem, key) => {
-                            return key === parseInt(props.index) ? { ...cartItem, quantity: inputValue+1 } : {...cartItem}
-                           
-                        });
-                            
-                        updateCart(_cart);
-                        setcartItems(_cart);
-                       
-                    }
-                }      
-                
-                ><KeyboardArrowUpIcon /></span>
-
-
-                <span className='arrow minus'
-                 onClick={
-                        () => {
-                            if (inputValue !== 1) {
-                                setinputValue(inputValue - 1)
-                            }
-                            
-                            const _cart = props.cartItems?.map((cartItem, key) => {
-                                return key === parseInt(props.index) ? { ...cartItem, quantity: cartItem.quantity !== 1 ? inputValue-1 : cartItem.quantity } : {...cartItem}
-                            });
-
-                          
-                            
-                            updateCart(_cart);
-                            setcartItems(_cart);
-
-
-
-                        }
-                    }
-                ><KeyboardArrowDownIcon /></span>
-            </div>
-
-        </div>
-    )
-}
+  return (
+    <div className='addCartSection pt-4 pb-4 d-flex align-items-center '>
+      <div className='counterSec mr-3'>
+        <input type='number' value={inputValue} />
+        <button
+          disabled={isLoading}
+          className='arrow plus'
+          onClick={() => setInputValue(inputValue + 1)}>
+          <KeyboardArrowUpIcon />
+        </button>
+        <button
+          disabled={isLoading}
+          className='arrow minus'
+          onClick={() => setInputValue(inputValue > 1 ? inputValue - 1 : 1)}>
+          <KeyboardArrowDownIcon />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default QuantityBox;

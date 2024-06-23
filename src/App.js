@@ -19,6 +19,7 @@ import Cart from './pages/cart/Cart';
 
 import data from './data';
 import Order from './pages/Order/Order';
+import UseAxiosSecured from './utils/UseAxiosSecure';
 
 const MyContext = createContext();
 
